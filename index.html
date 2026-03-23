@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="description" content="Steven Nathaniel R. Castillo - Full Stack Web Developer Portfolio. React, Node.js, modern web apps.">
+   <title>Steve Castillo | Full Stack Developer Portfolio</title>
+   <link rel="stylesheet" href="style.css">
+   <link rel="stylesheet" href="rate-design.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+   <!-- Loading Screen -->
+   <div id="loading-screen">
+      <div class="loader-wrapper">
+         <div class="loader-ring"></div>
+         <div class="loader-ring"></div>
+         <div class="loader-text">SC</div>
+      </div>
+   </div>
+
+   <!-- Header -->
+   <header>
+      <h2 class="logo">PORTFOLIO</h2>
+      <div class="nav-container">
+         <nav class="navigation">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact">Contact</a>
+         </nav>
+         <button class="theme-toggle" id="themeToggle" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
+            <i class="fas fa-moon"></i>
+         </button>
+      </div>
+   </header>
+
+   <!-- Hero - FIXED LAYOUT -->
+   <section id="home" class="hero">
+      <div class="hero-wrapper">
+         <!-- Left: Profile Image -->
+         <div class="hero-right">
+            <img src="me.jpg" alt="Steven Nathaniel R. Castillo - Full Stack Web Developer" class="profile-img" loading="lazy">
+         </div>
+         
+         <!-- Right: Content + Feedback -->
+         <div class="hero-left">
+            <div class="hero-content">
+               <div class="hero-text">
+                  <h1 data-fallback="Steve Castillo"></h1>
+                  <p data-fallback="Full Stack Web Developer"></p>
+               </div>
+               
+               <div class="cta-buttons">
+                  <a href="#projects" class="btn btn-primary" aria-label="View my projects">View My Work</a>
+                  <button class="btn btn-secondary" aria-label="Download CV">Download CV</button>
+               </div>
+            </div>
+
+            <!-- Latest Feedback Post Box - Bottom Right -->
+            <div class="feedback-post-box">
+               <div class="feedback-header">
+                  <i class="fas fa-star"></i>
+                  <span>Latest Feedback</span>
+               </div>
+               <div id="latest-feedback-list">
+                  <div class="feedback-placeholder">
+                     Submit feedback to see reviews!
+                  </div>
+               </div>
+               <div id="rating-average"></div>
+            </div>
+         </div>
+      </div>
+   </section>
+
+   <!-- About -->
+   <section id="about" class="about">
+      <div class="container">
+         <h2>About Me</h2>
+         <div class="about-content">
+            <p>Hi! I'm <strong>Steven Nathaniel R. Castillo</strong> (call me Steve), a passionate Full Stack Web Developer based in the Philippines. I specialize in building modern, responsive web applications using the MERN stack (MongoDB, Express, React, Node.js).</p>
+            <p>With 2+ years of hands-on experience, I've developed production-ready apps including real-time dashboards, e-commerce platforms, and SaaS tools. I love turning complex problems into intuitive user experiences and staying ahead with cutting-edge tech like Next.js, Tailwind CSS, and TypeScript.</p>
+            <p>When not coding, I'm contributing to open-source, experimenting with AI tools, or hiking in the Cordilleras. Let's build something amazing together!</p>
+            <div style="margin-top: 30px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+               <span class="tag" style="font-size: 1.1em;">0 Years Experience</span>
+               <span class="tag" style="font-size: 1.1em;">10+ Projects</span>
+               <span class="tag" style="font-size: 1.1em;">100% Responsive</span>
+            </div>
+         </div>
+      </div>
+   </section>
+
+   <!-- Skills -->
+   <section id="skills" class="skills">
+      <div class="container">
+         <h2>Technical Skills</h2>
+         <div class="skills-grid">
+            <div class="skill-card">
+               <i class="fab fa-html5" style="color: #e34f26;"></i>
+               <h3>HTML5</h3>
+               <p>Semantic markup, accessibility (ARIA), SEO optimization</p>
+            </div>
+            <div class="skill-card">
+               <i class="fab fa-css3-alt" style="color: #1572b6;"></i>
+               <h3>CSS3 / Tailwind</h3>
+               <p>Responsive design, animations, CSS Grid/Flexbox</p>
+            </div>
+            <div class="skill-card">
+               <i class="fab fa-js-square" style="color: #f7df1e;"></i>
+               <h3>JavaScript / TypeScript</h3>
+               <p>ES6+, async/await, DOM manipulation, performance</p>
+            </div>
+            <div class="skill-card">
+               <i class="fab fa-react" style="color: #61dafb;"></i>
+               <h3>React / Next.js</h3>
+               <p>Component architecture, hooks, SSR, state management</p>
+            </div>
+            <div class="skill-card">
+               <i class="fas fa-server" style="color: #00d4aa;"></i>
+               <h3>Node.js / Express</h3>
+               <p>REST APIs, authentication (JWT), middleware</p>
+            </div>
+            <div class="skill-card">
+               <i class="fas fa-database" style="color: #47b1ff;"></i>
+               <h3>MongoDB / PostgreSQL</h3>
+               <p>NoSQL/SQL, Mongoose, database design</p>
+            </div>
+         </div>
+      </div>
+   </section>
+
+   <!-- Projects -->
+   <section id="projects" class="projects">
+      <div class="container">
+         <h2>Featured Projects</h2>
+         <div class="projects-grid">
+            <div class="project-card">
+               <div class="project-image">
+                  <i class="fas fa-tasks"></i>
+               </div>
+               <h3>Smart Task Manager</h3>
+               <p>Full-stack Todo app with real-time collaboration, drag-drop UI, user auth, and AI-powered task prioritization. Built during BlackboxAI hackathon.</p>
+               <div class="project-tags">
+                  <span class="tag">React</span>
+                  <span class="tag">Node.js</span>
+                  <span class="tag">Socket.io</span>
+                  <span class="tag">MongoDB</span>
+               </div>
+               <div class="project-links">
+                  <a href="https://github.com/stevecastillo/smart-task-manager" class="btn btn-small">GitHub</a>
+                  <a href="#" class="btn btn-secondary btn-small">Live Demo</a>
+               </div>
+            </div>
+
+            <div class="project-card">
+               <div class="project-image">
+                  <i class="fas fa-shopping-cart"></i>
+               </div>
+               <h3>E-Commerce Dashboard</h3>
+               <p>Admin panel for online store with inventory management, sales analytics, Stripe payments, and role-based access control.</p>
+               <div class="project-tags">
+                  <span class="tag">Next.js</span>
+                  <span class="tag">Prisma</span>
+                  <span class="tag">Tailwind</span>
+                  <span class="tag">Chart.js</span>
+               </div>
+               <div class="project-links">
+                  <a href="https://github.com/stevecastillo/ecommerce-admin" class="btn btn-small">GitHub</a>
+                  <a href="#" class="btn btn-secondary btn-small">Demo</a>
+               </div>
+            </div>
+
+            <div class="project-card">
+               <div class="project-image">
+                  <i class="fas fa-chart-line"></i>
+               </div>
+               <h3>Analytics Dashboard</h3>
+               <p>Real-time data visualization platform with interactive charts, custom metrics, and export capabilities. Used D3.js + React.</p>
+               <div class="project-tags">
+                  <span class="tag">React</span>
+                  <span class="tag">D3.js</span>
+                  <span class="tag">Node.js</span>
+                  <span class="tag">PostgreSQL</span>
+               </div>
+               <div class="project-links">
+                  <a href="https://github.com/stevecastillo/analytics-dash" class="btn btn-small">GitHub</a>
+                  <a href="#" class="btn btn-secondary btn-small">Live</a>
+               </div>
+            </div>
+         </div>
+         <p style="text-align: center; margin-top: 3rem; color: var(--text-tertiary); font-size: 1.1rem;">
+            <a href="https://github.com/Pachiiii?tab=repositories" style="color: var(--accent-color); text-decoration: none; font-weight: 500;">
+               View all 12+ projects on GitHub →
+            </a>
+         </p>
+      </div>
+   </section>
+
+   <!-- Contact -->
+   <section id="contact" class="contact">
+      <div class="container">
+         <h2>Get In Touch</h2>
+         <div class="contact-wrapper">
+            <form class="contact-form">
+               <div class="form-group">
+                  <input type="text" name="name" placeholder="Your Name *" required maxlength="50">
+               </div>
+               <div class="form-group">
+                  <input type="email" name="email" placeholder="your@email.com *" required>
+               </div>
+               <div class="form-group">
+                  <textarea name="message" placeholder="Tell me about your next project... *" rows="5" required maxlength="500"></textarea>
+               </div>
+               <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+
+            <div class="feedback-section">
+               <h4>Rate My Portfolio</h4>
+               <div class="stars">
+                  <i class="far fa-star" data-rate="1"></i>
+                  <i class="far fa-star" data-rate="2"></i>
+                  <i class="far fa-star" data-rate="3"></i>
+                  <i class="far fa-star" data-rate="4"></i>
+                  <i class="far fa-star" data-rate="5"></i>
+               </div>
+               <textarea placeholder="Your thoughts & suggestions? (optional)" maxlength="280"></textarea>
+               <button class="btn feedback-btn">Submit Rating</button>
+            </div>
+
+            <div class="social-links">
+               <h3>Connect With Me</h3>
+               <div class="social-buttons">
+                  <a href="https://www.facebook.com/tebaaan8" class="social-btn" target="_blank" rel="noopener">
+                     <i class="fab fa-facebook-f"></i>
+                  </a>
+                  <a href="https://github.com/Pachiiii" class="social-btn" target="_blank" rel="noopener">
+                     <i class="fab fa-github"></i>
+                  </a>
+                  <a href="https://linkedin.com/in/stevecastillo-dev" class="social-btn" target="_blank" rel="noopener">
+                     <i class="fab fa-linkedin-in"></i>
+                  </a>
+                  <a href="mailto:stevencastillo0000@gmail." class="social-btn">
+                     <i class="fas fa-envelope"></i>
+                  </a>
+               </div>
+            
+            </div>
+         </div>
+      </div>
+   </section>
+
+   <footer>
+      <div class="container">
+         <p>&copy; <span id="current-year"></span> Steven Castillo. Built with React enthusiasm. 
+            <a href="#" style="color: var(--text-secondary);">Source</a>
+         </p>
+      </div>
+   </footer>
+
+   <script src="script.js"></script>
+</body>
+</html>
