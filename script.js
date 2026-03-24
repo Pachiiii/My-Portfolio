@@ -9,6 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initStarRating();
     initSmoothScroll();
     initScrollObserver();
+    initProjectGallery(); // Initialize B&W Gallery
+    initModernAnimations(); // New animation trigger
+    initTimelineAnimations(); // Timeline specific animation
+    initWorkSlider(); // New 3D JS Slider
+    initHobbiesGallery(); // New Hobbies Tab Gallery
     initContactForm();
     initRippleEffect();
     initNavHighlight();
@@ -50,7 +55,7 @@ function initLoader() {
             setTimeout(() => {
                 initHeroTyping();
             }, 500);
-        }, 5000);
+        }, 800); // Reduced to 800ms for snappier experience
     };
 
     if (document.readyState === 'complete') {
@@ -164,10 +169,185 @@ function initScrollObserver() {
         });
     }, {threshold: 0.1, rootMargin: '-50px'});
 
-    document.querySelectorAll('.skill-card, .project-card').forEach(card => {
+    // Removed .project-card to prevent conflicts with the gallery slider visibility
+    document.querySelectorAll('.skill-card').forEach(card => {
         card.style.opacity = '0';
         card.style.transition = 'all 0.6s ease';
         observer.observe(card);
+    });
+}
+
+/**
+ * Handles modern slide-in animations for About section
+ */
+function initModernAnimations() {
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in-view');
+            }
+        });
+    }, { threshold: 0.2, rootMargin: '0px' });
+
+    document.querySelectorAll('.animate-left, .animate-right').forEach(el => observer.observe(el));
+}
+
+/**
+ * Handles staggered animation for timeline items
+ */
+function initTimelineAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in-view');
+                observer.unobserve(entry.target); // Animate only once
+            }
+        });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.timeline-item').forEach((item, index) => {
+        item.style.transitionDelay = `${index * 0.2}s`; // Add delay for staggered effect
+        observer.observe(item);
+    });
+}
+
+/**
+ * Handles the 3D Infinite Stream Slider for Work Experience
+ * Replaces CSS animation with JS for "Center Focus" effect
+ */
+function initWorkSlider() {
+    const track = document.querySelector('.work-gallery-track');
+    const dotsContainer = document.querySelector('.work-gallery-dots');
+    if (!track) return;
+
+    const images = Array.from(track.querySelectorAll('img'));
+    if (images.length === 0) return;
+
+    // Configuration
+    const itemWidth = 390; // 350px Image + 40px Gap
+    const uniqueCount = images.length / 2; // Handle duplicates
+    
+    const centerOffset = 215; // Padding (40) + Half Item (175)
+    
+    let currentIndex = 0;
+    let isHovered = false;
+    let autoPlayInterval;
+
+    // Create Dots
+    if (dotsContainer) {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < uniqueCount; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('work-dot');
+            dot.addEventListener('click', () => {
+                goToSlide(i);
+            });
+            dotsContainer.appendChild(dot);
+        }
+    }
+    const dots = dotsContainer ? Array.from(dotsContainer.querySelectorAll('.work-dot')) : [];
+
+    // Updates the slider position and highlights
+    function updateGallery(smooth = true) {
+        const containerWidth = track.parentElement.offsetWidth;
+        const currentItemCenter = centerOffset + (currentIndex * itemWidth);
+        const translateVal = (containerWidth / 2) - currentItemCenter;
+
+        track.style.transition = smooth ? 'transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)' : 'none'; // Bouncy Effect
+        if (smooth) {
+            track.style.transition = 'transform 0.8s cubic-bezier(0.25, 1.2, 0.5, 1)'; // Smooth Bouncy
+            images.forEach(img => img.style.transition = ''); // Restore CSS
+        } else {
+            track.style.transition = 'none';
+            images.forEach(img => img.style.transition = 'none'); // Disable for invisible snap
+        }
+        track.style.transform = `translateX(${translateVal}px)`;
+
+        // Update Highlight
+        images.forEach((img, i) => img.classList.toggle('active', i === currentIndex));
+        
+        // Update Dots
+        const realIndex = currentIndex % uniqueCount;
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === realIndex));
+
+        // Restore transitions after snap
+        if (!smooth) {
+            void track.offsetWidth; // Force reflow
+            setTimeout(() => images.forEach(img => img.style.transition = ''), 50);
+        }
+    }
+
+    function nextSlide() {
+        if (isHovered) return;
+        currentIndex++;
+        updateGallery(true);
+
+        // Loop Check: If reached the duplicate set start, snap back to 0
+        if (currentIndex === uniqueCount) {
+            setTimeout(() => {
+                currentIndex = 0;
+                updateGallery(false); // Instant jump (no animation)
+            }, 850); // Increased buffer to ensure animation is fully done
+        }
+    }
+
+    function goToSlide(index) {
+        currentIndex = index;
+        updateGallery(true);
+        resetTimer();
+    }
+
+    function resetTimer() {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = setInterval(nextSlide, 3000); // 3 Seconds Interval
+    }
+
+    // Events
+    track.parentElement.addEventListener('mouseenter', () => isHovered = true);
+    track.parentElement.addEventListener('mouseleave', () => isHovered = false);
+    window.addEventListener('resize', () => updateGallery(false));
+
+    // Pause on tab switch to prevent animation sync issues
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            clearInterval(autoPlayInterval);
+        } else {
+            resetTimer();
+        }
+    });
+
+    // Init
+    updateGallery(false);
+    resetTimer();
+}
+
+/**
+ * Handles the tabbed gallery for the Hobbies section.
+ */
+function initHobbiesGallery() {
+    const nav = document.querySelector('.hobbies-nav');
+    const galleries = document.querySelectorAll('.hobby-gallery');
+    const tabs = document.querySelectorAll('.hobby-tab');
+
+    if (!nav || galleries.length === 0) return;
+
+    nav.addEventListener('click', (e) => {
+        const clickedTab = e.target.closest('.hobby-tab');
+        if (!clickedTab) return;
+
+        // Prevent action if already active
+        if (clickedTab.classList.contains('active')) return;
+
+        const targetHobby = clickedTab.dataset.target;
+
+        // Update tabs
+        tabs.forEach(tab => tab.classList.remove('active'));
+        clickedTab.classList.add('active');
+
+        // Update galleries
+        galleries.forEach(gallery => {
+            gallery.classList.toggle('active', gallery.dataset.hobby === targetHobby);
+        });
     });
 }
 
@@ -180,14 +360,30 @@ function initContactForm() {
         form.addEventListener('submit', e => {
             e.preventDefault();
             const formData = new FormData(form);
-            const data = Object.fromEntries(formData);
-            if (data.name && data.email && data.message) {
-                const btn = form.querySelector('button');
-                const originalText = btn.textContent;
-                btn.textContent = 'Sent! ✓';
-                form.reset();
-                setTimeout(() => btn.textContent = originalText, 3000);
-            }
+            
+            // ---------------------------------------------------------
+            // PALITAN MO ITO NG IYONG FORMSPREE ID
+            // Mag-sign up sa https://formspree.io/ para makakuha nito
+            const formID = 'xwvrgrbd'; 
+            // ---------------------------------------------------------
+
+            fetch(`https://formspree.io/f/${formID}`, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    const btn = form.querySelector('button');
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Message Sent Successfully!';
+                    form.reset();
+                    setTimeout(() => btn.textContent = originalText, 3000);
+                } else {
+                    alert("Oops! There was a problem submitting your form.");
+                }
+            }).catch(error => {
+                alert("Error connecting to the message service.");
+            });
         });
     }
 
@@ -383,4 +579,112 @@ class TestimonialsManager {
             });
         }
     }
+}
+
+/**
+ * Handles Black & White Project Gallery Slider
+ */
+function initProjectGallery() {
+    const track = document.querySelector('.gallery-track');
+    const nextBtn = document.querySelector('.gallery-btn.next');
+    const prevBtn = document.querySelector('.gallery-btn.prev');
+    const dotsContainer = document.querySelector('.gallery-dots');
+    
+    if (!track || !nextBtn || !prevBtn) return;
+
+    let currentIndex = 0;
+    const cards = track.querySelectorAll('.project-card');
+    const totalCards = cards.length;
+
+    const getCardWidth = () => {
+        const card = cards[0];
+        // The card's offsetWidth plus the gap from the flex container
+        return card ? card.offsetWidth + 30 : 0;
+    };
+
+    const moveGallery = () => {
+        const cardWidthWithGap = getCardWidth();
+        const card = cards[0];
+        if (!card) return;
+
+        const containerWidth = document.querySelector('.gallery-container').offsetWidth;
+        
+        // Calculate offset to center the card (without its gap) inside the container
+        const centerOffset = (containerWidth / 2) - (card.offsetWidth / 2);
+        
+        // Calculate the final translation by applying the offset and then subtracting the scroll distance
+        const newTranslateX = centerOffset - (currentIndex * cardWidthWithGap);
+
+        track.style.transform = `translateX(${newTranslateX}px)`;
+        updateDotsActive();
+        updateCardsActive();
+    };
+
+    const createDots = () => {
+        if (!dotsContainer) return;
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalCards; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('gallery-dot');
+            dot.addEventListener('click', () => {
+                currentIndex = i;
+                moveGallery();
+            });
+            dotsContainer.appendChild(dot);
+        }
+        updateDotsActive(); // Initial active dot
+    };
+
+    const updateDotsActive = () => {
+        if (!dotsContainer) return;
+        const dots = dotsContainer.querySelectorAll('.gallery-dot');
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentIndex);
+        });
+    };
+
+    const updateCardsActive = () => {
+        cards.forEach((card, i) => {
+            card.classList.toggle('active', i === currentIndex);
+        });
+    };
+
+    nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % totalCards;
+        moveGallery();
+    });
+
+    prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+        moveGallery();
+    });
+
+    // Recalculate position on resize without resetting index
+    window.addEventListener('resize', moveGallery);
+
+    // Touch Swipe Support for Mobile
+    let startX = 0;
+    let startY = 0;
+
+    track.addEventListener('touchstart', e => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+    }, { passive: true });
+
+    track.addEventListener('touchend', e => {
+        const endX = e.changedTouches[0].clientX;
+        const endY = e.changedTouches[0].clientY;
+        const diffX = startX - endX;
+        const diffY = startY - endY;
+
+        // Detect horizontal swipe: movement > 50px and mostly horizontal
+        if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY) * 2) {
+            if (diffX > 0) nextBtn.click(); // Left swipe -> Next
+            else prevBtn.click(); // Right swipe -> Prev
+        }
+    }, { passive: true });
+    
+    // Initial setup
+    createDots();
+    moveGallery();
 }
